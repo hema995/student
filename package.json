@@ -1,14 +1,49 @@
 {
-  "name": "rest-express",
+  "name": "student-management-system",
   "version": "1.0.0",
-  "type": "module",
+  "author": "Student Management System",
+  "description": "نظام إدارة بيانات الطلاب",
+  "main": "electron/main.js",
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
+    "dev:electron": "concurrently \"cross-env NODE_ENV=development vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
     "build": "tsx script/build.ts",
+    "build:electron": "npm run build && electron-builder",
     "start": "NODE_ENV=production node dist/index.cjs",
+    "start:electron": "electron .",
     "check": "tsc",
     "db:push": "drizzle-kit push"
+  },
+  "build": {
+    "appId": "com.student.management",
+    "productName": "نظام إدارة بيانات الطلاب",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "dist/public/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "client/public",
+        "to": "public"
+      }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "client/public/favicon.png"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Education"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.education"
+    }
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -41,6 +76,7 @@
     "@radix-ui/react-toggle-group": "^1.1.3",
     "@radix-ui/react-tooltip": "^1.2.0",
     "@tanstack/react-query": "^5.60.5",
+    "better-sqlite3": "^12.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -48,6 +84,8 @@
     "date-fns": "^3.6.0",
     "drizzle-orm": "^0.39.3",
     "drizzle-zod": "^0.7.0",
+    "electron": "^39.2.7",
+    "electron-store": "^11.0.2",
     "embla-carousel-react": "^8.6.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
@@ -94,13 +132,17 @@
     "@types/ws": "^8.5.13",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.4",
+    "electron-builder": "^26.0.12",
     "esbuild": "^0.25.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.21.0",
     "typescript": "5.6.3",
-    "vite": "^5.4.20"
+    "vite": "^5.4.20",
+    "wait-on": "^9.0.3"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
